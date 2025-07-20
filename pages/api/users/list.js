@@ -1,4 +1,4 @@
-import { authenticate, authorizeRole } from "@/lib/authMiddleware";
+import { authenticate, authorizeRole } from "../../../lib/authMiddleware";
 import { connectToDatabase } from "../../../lib/mongodb";
 import User from "../../../models/user";
 

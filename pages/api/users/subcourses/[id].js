@@ -1,13 +1,13 @@
 // pages/api/user/subcourses/[id].ts
-import { authenticate, authorizeRole } from "@/lib/authMiddleware";
-import dbConnect from "../../../lib/dbConnect";
+import { connectToDatabase } from "../../../lib/mongodb";
+import { authenticate, authorizeRole } from "../../../lib/authMiddleware";
 import SubCourse from "../../../models/SubCourse";
 import jwt from "jsonwebtoken";
 
 const GDRIVE_SECRET = process.env.GDRIVE_SECRET;
 
 export default async function handler(req, res) {
-  await dbConnect();
+  await connectToDatabase();
 
   const { id } = req.query;
 
