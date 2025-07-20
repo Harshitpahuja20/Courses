@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import AdminNavbar from "@/components/AdminNavbar";
-import withAuth from "@/hoc/withAuth";
+import AdminNavbar from "../../../../components/AdminNavbar";
+import withAuth from "../../../../hoc/withAuth";
 
 function SubCoursesPage() {
   const router = useRouter();

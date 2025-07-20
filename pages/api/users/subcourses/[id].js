@@ -1,7 +1,7 @@
 // pages/api/user/subcourses/[id].ts
-import { connectToDatabase } from "../../../lib/mongodb";
-import { authenticate, authorizeRole } from "../../../lib/authMiddleware";
-import SubCourse from "../../../models/SubCourse";
+import { connectToDatabase } from "../../../../lib/mongodb";
+import { authenticate, authorizeRole } from "../../../../lib/authMiddleware";
+import SubCourse from "../../../../models/subcourse";
 import jwt from "jsonwebtoken";
 
 const GDRIVE_SECRET = process.env.GDRIVE_SECRET;

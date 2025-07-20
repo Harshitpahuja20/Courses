@@ -1,6 +1,6 @@
 "use client";
 
-import UserNavbar from "@/components/UserNavbar";
+import UserNavbar from "../../components/UserNavbar";
 import withAuth from "../../hoc/withAuth";
 import { useEffect, useState } from "react";
 import axios from "axios";

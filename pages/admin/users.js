@@ -1,6 +1,6 @@
 "use client";
 
-import AdminNavbar from "@/components/AdminNavbar";
+import AdminNavbar from "../../components/AdminNavbar";
 import { useEffect, useState } from "react";
 import withAuth from "../../hoc/withAuth";
 

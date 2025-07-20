@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { authenticatePublic } from "@/lib/authMiddleware";
+import { authenticatePublic } from "../../../lib/authMiddleware";
 
 export default function Custom404() {
   const router = useRouter();
