@@ -52,7 +52,7 @@ function UserDashboard() {
               <div className="flex-column items-center space-x-2">
                 <p className="text-xl text-end me-0">➡️</p>
                 <p className="text-sm text-gray-500">
-                  Total Videos ({course.subCourses?.length || 0})
+                  View All Videos
                 </p>
               </div>
             </div>

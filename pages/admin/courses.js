@@ -103,7 +103,6 @@ function CoursesPage() {
                     <tr>
                       <th className="px-6 py-4">Title</th>
                       <th className="px-6 py-4">Description</th>
-                      <th className="px-6 py-4">Subcourses</th>
                       <th className="px-6 py-4">Created</th>
                       <th className="px-6 py-4 text-center">Add</th>
                     </tr>
@@ -119,9 +118,6 @@ function CoursesPage() {
                         </td>
                         <td className="px-6 py-4 text-gray-700">
                           {course.description}
-                        </td>
-                        <td className="px-6 py-4">
-                          {course.totalSubCourses || 0}
                         </td>
                         <td className="px-6 py-4">
                           {new Date(course.createdAt).toLocaleDateString()}

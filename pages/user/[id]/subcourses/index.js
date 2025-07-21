@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import UserNavbar from "../../../../components/UserNavbar";
 import withAuth from "../../../../hoc/withAuth";
+import VideoModal from "../../../../components/viewModal"; // Adjust path if needed
+import { jwtDecode } from "jwt-decode";
 
 function SubCoursesPage() {
   const router = useRouter();
@@ -12,6 +14,7 @@ function SubCoursesPage() {
 
   const [course, setCourse] = useState(null);
   const [subcourses, setSubcourses] = useState([]);
+  const [selectedGDriveId, setSelectedGDriveId] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -58,9 +61,19 @@ function SubCoursesPage() {
                   <div
                     key={course._id}
                     className="flex justify-between items-center border border-gray-300 rounded-lg p-4 hover:shadow-md transition cursor-pointer"
-                    onClick={() =>
-                      router.push(`/user/${course._id}/subcourses`)
-                    }
+                    onClick={() => {
+                      if (course.gdriveUrl) {
+                        try {
+                          const decoded = jwtDecode(course.gdriveUrl)?.gdriveUrl;
+                          const match = decoded.match(/\/file\/d\/(.*?)\//);
+                          if (match && match[1]) {
+                            setSelectedGDriveId(match[1]);
+                          }
+                        } catch (e) {
+                          alert("Invalid video link.");
+                        }
+                      }
+                    }}
                   >
                     <div>
                       <h3 className="text-lg font-bold">{course.title}</h3>
@@ -68,9 +81,7 @@ function SubCoursesPage() {
                     </div>
                     <div className="flex-column items-center space-x-2">
                       <p className="text-xl text-end me-0">▶️</p>
-                      <p className="text-sm text-gray-500">
-                        Play Now!
-                      </p>
+                      <p className="text-sm text-gray-500">Play Now!</p>
                     </div>
                   </div>
                 ))}
@@ -79,6 +90,12 @@ function SubCoursesPage() {
           </div>
         </div>
       </div>
+      {selectedGDriveId && (
+        <VideoModal
+          gdriveId={selectedGDriveId}
+          onClose={() => setSelectedGDriveId(null)}
+        />
+      )}
     </>
   );
 }
