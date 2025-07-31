@@ -9,9 +9,9 @@ export default async function handler(req, res) {
 
   await connectToDatabase();
 
-  const { name, email, password, role } = req.body;
+  const { name, email, password,expireAt, role } = req.body;
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !expireAt) {
     return res.status(400).json({ error: "All fields are required" });
   }
 
@@ -23,8 +23,16 @@ export default async function handler(req, res) {
     if (existing) return res.status(409).json({ error: "User already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log({
+      name,
+      expireAt : new Date(expireAt),
+      email,
+      password: hashedPassword,
+      role: role || "user",
+    })
     const user = await User.create({
       name,
+      expireAt : new Date(expireAt),
       email,
       password: hashedPassword,
       role: role || "user",

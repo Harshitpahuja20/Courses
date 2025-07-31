@@ -14,7 +14,6 @@ function SubCoursesPage() {
   const [subcourses, setSubcourses] = useState([]);
   const [form, setForm] = useState({
     title: "",
-    description: "",
     gdriveUrl: "",
     index: "",
   });
@@ -58,7 +57,7 @@ function SubCoursesPage() {
 
     const data = await res.json();
     setSubcourses([...subcourses, data]);
-    setForm({ title: "", description: "", gdriveUrl: "", index: "" });
+    setForm({ title: "", gdriveUrl: "", index: "" });
   } catch (err) {
     console.error(err);
     // optionally handle error UI here
@@ -109,7 +108,7 @@ function SubCoursesPage() {
                   required
                 />
               </div>
-              <textarea
+              {/* <textarea
                 name="description"
                 placeholder="Subcourse Description"
                 value={form.description}
@@ -117,7 +116,7 @@ function SubCoursesPage() {
                 rows={4}
                 className="w-full p-3 border rounded focus:outline-none focus:ring-2 focus:ring-gray-800"
                 required
-              />
+              /> */}
               <input
                 type="url"
                 name="gdriveUrl"
@@ -150,7 +149,6 @@ function SubCoursesPage() {
                     <tr>
                       <th className="p-3">Index</th>
                       <th className="p-3">Title</th>
-                      <th className="p-3">Description</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -160,7 +158,6 @@ function SubCoursesPage() {
                         <tr key={sub._id} className="border-t hover:bg-gray-50">
                           <td className="p-3">{sub.index}</td>
                           <td className="p-3">{sub.title}</td>
-                          <td className="p-3">{sub.description}</td>
                         </tr>
                       ))}
                   </tbody>

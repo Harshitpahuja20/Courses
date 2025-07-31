@@ -10,6 +10,7 @@ function AdminUsersPage() {
     name: "",
     email: "",
     password: "",
+    expireAt: new Date(),
     role: "user",
   });
 
@@ -57,6 +58,57 @@ function AdminUsersPage() {
     }
   };
 
+  // Inside your component:
+
+  // Utilities
+  const toInputDate = (d) => d.toISOString().slice(0, 10);
+  const addDays = (date, days) => {
+    const d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return d;
+  };
+  const addMonths = (date, months) => {
+    const d = new Date(date);
+    const day = d.getDate();
+    d.setMonth(d.getMonth() + months);
+    if (d.getDate() < day) d.setDate(0); // handle month-end
+    return d;
+  };
+  const addYears = (date, years) => {
+    const d = new Date(date);
+    d.setFullYear(d.getFullYear() + years);
+    return d;
+  };
+
+  // Extend your form state with ONE date field (e.g., expiryDate)
+  /// const [form, setForm] = useState({ name:"", email:"", password:"", expiryDate:"" });
+
+  const applyPreset = (key) => {
+    const today = new Date();
+    let target = today;
+
+    switch (key) {
+      case "1m":
+        target = addMonths(today, 1);
+        break;
+      case "45d":
+        target = addDays(today, 45);
+        break;
+      case "3m":
+        target = addMonths(today, 3);
+        break;
+      case "6m":
+        target = addMonths(today, 6);
+        break;
+      case "1y":
+        target = addYears(today, 1);
+        break;
+      default:
+        return;
+    }
+    setForm({ ...form, expireAt: toInputDate(target) });
+  };
+
   return (
     <>
       <AdminNavbar />
@@ -92,6 +144,37 @@ function AdminUsersPage() {
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 required
               />
+                <div className="flex w-full">
+                  <input
+                    type="date"
+                    className="flex-1 border border-gray-300 rounded-l px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    value={form.expireAt || ""}
+                    onChange={(e) =>
+                      setForm({ ...form, expireAt: e.target.value })
+                    }
+                    // remove min if past dates should be selectable
+                    min={toInputDate(new Date())}
+                    required
+                  />
+                  <select
+                    aria-label="Quick select duration"
+                    className="border border-l-0 border-gray-300 rounded-r px-3 py-2 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    defaultValue=""
+                    onChange={(e) => {
+                      applyPreset(e.target.value);
+                      e.currentTarget.value = ""; // reset to placeholder after apply
+                    }}
+                  >
+                    <option value="" disabled>
+                      Presets
+                    </option>
+                    <option value="1m">1 Month</option>
+                    <option value="45d">45 Days</option>
+                    <option value="3m">3 Months</option>
+                    <option value="6m">6 Months</option>
+                    <option value="1y">1 Year</option>
+                  </select>
+                </div>
               <button
                 type="submit"
                 className="bg-black text-white px-6 py-2 rounded hover:bg-gray-800 transition"

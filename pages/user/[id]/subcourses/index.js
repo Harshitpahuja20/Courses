@@ -42,7 +42,7 @@ function SubCoursesPage() {
           <h1 className="text-3xl font-semibold mb-2">{course.title}</h1>
           <p className="text-gray-200 mb-2">{course.description}</p>
           <div className="text-sm text-gray-300 space-y-1">
-            <p>Total Subcourses: {subcourses.length}</p>
+            <p>Total Chapters: {subcourses.length}</p>
           </div>
         </div>
 
@@ -51,40 +51,46 @@ function SubCoursesPage() {
           {/* Subcourse List */}
           <div className="w-full">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Subcourses List
+              Chapters List
             </h2>
             {subcourses.length === 0 ? (
               <p className="text-gray-500">No subcourses added yet.</p>
             ) : (
-              <div className="space-y-4">
-                {subcourses.map((course) => (
-                  <div
-                    key={course._id}
-                    className="flex justify-between items-center border border-gray-300 rounded-lg p-4 hover:shadow-md transition cursor-pointer"
-                    onClick={() => {
-                      if (course.gdriveUrl) {
-                        try {
-                          const decoded = jwtDecode(course.gdriveUrl)?.gdriveUrl;
-                          const match = decoded.match(/\/file\/d\/(.*?)\//);
-                          if (match && match[1]) {
-                            setSelectedGDriveId(match[1]);
-                          }
-                        } catch (e) {
-                          alert("Invalid video link.");
-                        }
-                      }
-                    }}
-                  >
-                    <div>
-                      <h3 className="text-lg font-bold">{course.title}</h3>
-                      <p className="text-gray-600">{course.description}</p>
+              <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {subcourses.map((course) => {
+                  let fileId = null;
+
+                  try {
+                    const decoded = jwtDecode(course.gdriveUrl);
+                    const gdriveUrl = decoded?.gdriveUrl;
+                    const match = gdriveUrl?.match(/\/file\/d\/(.*?)\//);
+                    fileId = match?.[1];
+                  } catch (e) {
+                    console.warn("Invalid JWT for gdriveUrl");
+                  }
+
+                  return (
+                    <div
+                      key={course._id}
+                      onClick={() => fileId && setSelectedGDriveId(fileId)}
+                      className="cursor-pointer rounded-lg overflow-hidden shadow hover:shadow-lg transition duration-300"
+                    >
+                      <div
+                        className="md:h-80 h-60 bg-cover bg-center relative"
+                        style={{
+                          backgroundImage: fileId
+                            ? `url(https://lh3.googleusercontent.com/d/${fileId}=s640)`
+                            : `url(/placeholder.jpg)`,
+                        }}
+                      >
+                        {/* <img src={`https://lh3.googleusercontent.com/d/${fileId}=s220`} /> */}
+                        <div className="absolute bottom-0 w-full bg-black bg-opacity-60 text-white p-2 text-sm font-semibold">
+                          {course.title}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-column items-center space-x-2">
-                      <p className="text-xl text-end me-0">▶️</p>
-                      <p className="text-sm text-gray-500">Play Now!</p>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

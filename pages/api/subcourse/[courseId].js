@@ -30,18 +30,19 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     authorizeRole(user, ["admin"]);
     const { courseId } = req.query;
-    const { title, description, gdriveUrl, index } = req.body;
+    const { title, gdriveUrl, index } = req.body;
 
     try {
       const encodedUrl = jwt.sign({ gdriveUrl }, process.env.GDRIVE_SECRET);
 
       const sub = await SubCourse.create({
         title,
-        description,
         gdriveUrl: encodedUrl,
         courseId: new mongoose.Types.ObjectId(courseId),
         index,
       });
+
+      console.log(sub)
 
       await course.findByIdAndUpdate(
         courseId,

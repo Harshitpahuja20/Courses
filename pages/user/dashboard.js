@@ -11,17 +11,17 @@ function UserDashboard() {
   const router = useRouter();
 
   const fetchCourses = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get("/api/courses", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        console.log(res)
-       if (res?.data?.success) setCourses(res?.data?.courses || []);
-      } catch (err) {
-        console.error("Failed to fetch courses:", err);
-      }
-    };
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get("/api/courses", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log(res);
+      if (res?.data?.success) setCourses(res?.data?.courses || []);
+    } catch (err) {
+      console.error("Failed to fetch courses:", err);
+    }
+  };
 
   useEffect(() => {
     fetchCourses();
@@ -32,28 +32,32 @@ function UserDashboard() {
       <UserNavbar />
 
       <div className="p-6">
-        <h2 className="text-2xl font-semibold mb-4">Available Chapters</h2>
+        <h2 className="text-2xl font-semibold mb-4">All topics</h2>
 
         {courses.length === 0 && (
-          <p className="text-gray-600">No chapters available.</p>
+          <p className="text-gray-600">No topics available.</p>
         )}
 
-        <div className="space-y-4">
+        <div className="grid gap-15 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {courses.map((course) => (
             <div
               key={course._id}
-              className="flex justify-between items-center border border-gray-300 rounded-lg p-4 hover:shadow-md transition cursor-pointer"
-              onClick={() => router.push(`/user/${course._id}/subcourses`)}
+              className="border border-gray-300 rounded-lg flex flex-col justify-between min-h-[220px]"
             >
-              <div>
-                <h3 className="text-lg font-bold">{course.title}</h3>
+              {/* Title & Description */}
+              <div className=" p-4 mt-auto">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {course.title}
+                </h3>
                 <p className="text-gray-600">{course.description}</p>
               </div>
-              <div className="flex-column items-center space-x-2">
-                <p className="text-xl text-end me-0">➡️</p>
-                <p className="text-sm text-gray-500">
-                  View All Videos
-                </p>
+
+              {/* Bottom: View Link */}
+              <div
+                onClick={() => router.push(`/user/${course._id}/subcourses`)}
+                className="p-4 text-white bg-gray-800 rounded-br-lg rounded-bl-lg cursor-pointer hover:underline flex items-center justify-start border-t border-gray-400 pt-2"
+              >
+                <span className="text-md">View Chapters</span>
               </div>
             </div>
           ))}
