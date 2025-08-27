@@ -1,23 +1,192 @@
 @import "tailwindcss";
 
+/* === Brand tokens (default to DARK) === */
 :root {
-  --background: #ffffff;
+  --background: #0b1220; /* page bg: deep navy */
+  --foreground: #e6edf3; /* primary text */
+  --surface: #0f1b2d; /* cards / inputs */
+  --elev-2: #13233a; /* hover / focus bg */
+  --border: #223552; /* subtle borders */
+  --muted: #9fb0c8; /* secondary text */
+  --brand: #ff7a1a; /* orange accent */
 }
 
+/* If you ever want automatic light mode later, flip values here.
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #f7f8fb;
+    --foreground: #0f172a;
+    --surface: #ffffff;
+    --elev-2: #f0f3f8;
+    --border: #d7dce6;
+    --muted: #64748b;
+    --brand: #f97316;
+  }
+}
+*/
+
+/* === Map tokens into Tailwind (v4) === */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-border: var(--border);
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* === Base type === */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+/* Subtle background texture */
+.bg-app {
+  background: radial-gradient(
+      1200px 600px at 10% -10%,
+      color-mix(in oklab, var(--brand), transparent 88%),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at 110% 10%,
+      color-mix(in oklab, #60a5fa, transparent 92%),
+      transparent 60%
+    ),
+    var(--background);
+}
+
+/* A nicer card feel */
+.card {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  background: var(--surface);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+.input::placeholder {
+  color: color-mix(in oklab, var(--foreground), transparent 60%);
+}
+.input:focus-visible {
+  outline: none;
+  background: var(--elev-2);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--brand), transparent 72%);
+  border-color: color-mix(in oklab, var(--brand), var(--border) 65%);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  transition: transform 0.12s ease, opacity 0.18s ease, box-shadow 0.18s ease;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-brand {
+  background: var(--brand);
+  color: #0a0a0a;
+}
+.btn-brand:hover {
+  filter: brightness(1.05);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover {
+  background: var(--elev-2);
+}
+
+/* Segmented toggle */
+.segmented {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.segmented .seg-btn {
+  padding: 0.55rem 0.9rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+}
+.segmented .seg-btn[data-active="true"] {
+  background: var(--brand);
+  color: #0a0a0a;
+}
+.segmented .seg-btn[data-active="false"] {
+  color: var(--foreground);
+}
+
+/* --- helpers for split layout + brand pane --- */
+.brand-pane {
+  background: radial-gradient(
+      1200px 600px at 0% -10%,
+      color-mix(in oklab, var(--brand), transparent 86%),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px 500px at 120% 10%,
+      color-mix(in oklab, #60a5fa, transparent 90%),
+      transparent 60%
+    ),
+    var(--surface);
+}
+
+.border-token {
+  border-color: var(--border);
+}
+.text-muted {
+  color: var(--muted);
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical; 
+  overflow: hidden;
+}
+
+/* Optional: reduce animation if user prefers */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
 
-body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+/* Glassy dark navbar surface using your tokens */
+.nav-surface {
+  /* fallback */
+  background: rgba(15, 27, 45, 0.86);
+  /* nicer if color-mix is supported */
+  background: color-mix(in oklab, var(--surface), transparent 14%);
 }
